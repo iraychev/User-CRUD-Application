@@ -3,8 +3,6 @@ import java.util.Scanner;
 
 public class Menu {
 
-
-
     public static void displayMenuOptions(){
         System.out.println("Choose one:");
         System.out.println("1 to create a User;");
@@ -37,27 +35,29 @@ public class Menu {
 
     private static void promptUserCreation() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter username: ");
+        System.out.println("Enter username(no special symbols): ");
         String username = scanner.nextLine();
 
-        System.out.println("Enter password:");
+        System.out.println("Enter password(At least one uppercase, one lowercase letter and a number):");
         String password = scanner.nextLine();
 
         System.out.println("Enter email:");
         String email = scanner.nextLine();
 
-        new UserDAO().createUser(new User(username, password, email));
+        new UserDAO().createUser(User.createUser(username, password, email));
         System.out.println("User created.");
     }
 
     private static void promptUserRead() {
+        int id = getInputForUserId();
+        User user = new UserDAO().readUser(id);
+        System.out.println(user.toString());
+    }
+
+    private static int getInputForUserId(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter id of User:");
-        int id = scanner.nextInt();
-
-        User user = new UserDAO().readUser(id);
-
-        System.out.println(user.toString());
+        return scanner.nextInt();
     }
 
     private static void promptAllUsersRead() {
@@ -68,28 +68,25 @@ public class Menu {
     }
 
     private static void promptUserUpdate() {
-        Scanner scanner = new Scanner(System.in);
+        User userToUpdate = getInputForUpdatedUser();
 
-        System.out.println("Enter id of User:");
-        int id = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter new username");
-        String username = scanner.nextLine();
-        System.out.println("Enter new password");
-        String password = scanner.nextLine();
-        System.out.println("Enter new email");
-        String email = scanner.nextLine();
-
-        User userToChange = new User(id, username,password,email);
-
-        User resultUser = new UserDAO().updateUser(userToChange);
+        User resultUser = new UserDAO().updateUser(userToUpdate);
         System.out.println("User changed to: \n"+resultUser);
     }
-
-
-    private static void promptUserDeletion() {
+    private static User getInputForUpdatedUser(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter id of User:");
-        int id = scanner.nextInt();
+        int id = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter new username(no special symbols): ");
+        String username = scanner.nextLine();
+        System.out.println("Enter new password(At least one uppercase, one lowercase letter and a number): ");
+        String password = scanner.nextLine();
+        System.out.println("Enter new email:");
+        String email = scanner.nextLine();
+        return User.createUser(id, username,password,email);
+    }
+    private static void promptUserDeletion() {
+        int id = getInputForUserId();
         if(new UserDAO().deleteUser(id)){
             System.out.println("User deleted successfully");
         }

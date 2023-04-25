@@ -4,19 +4,34 @@ public class User {
     private final String password;
     private final String email;
 
-    public User(int id, String username, String password, String email) {
+    private User(int id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
-    public User(String username, String password, String email) {
-        this.id = 0;
-        this.username = username;
-        this.password = password;
-        this.email = email;
+
+    public static User createUser(int id, String username, String password, String email) {
+        validateInput(username, password, email);
+        return new User(id, username, password, email);
     }
 
+    public static User createUser(String username, String password, String email) {
+        validateInput(username, password, email);
+        return new User(0, username, password, email);
+    }
+
+    private static void validateInput(String username, String password, String email) {
+        if (!InputValidator.validateUsername(username)) {
+            throw new InvalidUsernameException();
+        }
+        if (!InputValidator.validatePassword(password)) {
+            throw new InvalidPasswordException();
+        }
+        if (!InputValidator.validateEmail(email)) {
+            throw new InvalidEmailException();
+        }
+    }
     public int getId() {
         return id;
     }

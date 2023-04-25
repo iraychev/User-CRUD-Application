@@ -49,7 +49,7 @@ public class UserDAO{
             ResultSet resultSet = statement.executeQuery();
 
             if( resultSet.next()){
-                user = new User(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("email"));
+                user = User.createUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("email"));
             }
         } catch(SQLException e){
             e.printStackTrace();
@@ -70,7 +70,7 @@ public class UserDAO{
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                User user = new User(id, username, password, email);
+                User user = User.createUser(id, username, password, email);
                 users.add(user);
             }
         } catch(SQLException e){
@@ -105,6 +105,7 @@ public class UserDAO{
     public boolean deleteUser(int id) {
         String SQLQuery = "DELETE FROM user WHERE user.id = ?";
         boolean rowDeleted = false;
+
         try(Connection conn = getConnection()){
             PreparedStatement statement = conn.prepareStatement(SQLQuery);
             statement.setInt(1, id);
