@@ -1,3 +1,6 @@
+import user.User;
+import user.UserDAO;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -5,11 +8,11 @@ public class Menu {
 
     public static void displayMenuOptions(){
         System.out.println("Choose one:");
-        System.out.println("1 to create a User;");
-        System.out.println("2 to read a User;");
+        System.out.println("1 to create a user.User;");
+        System.out.println("2 to read a user.User;");
         System.out.println("3 to read all Users;");
-        System.out.println("4 to update a User;");
-        System.out.println("5 to delete a User;");
+        System.out.println("4 to update a user.User;");
+        System.out.println("5 to delete a user.User;");
         System.out.println("0 to exit the program.");
     }
 
@@ -45,7 +48,7 @@ public class Menu {
         String email = scanner.nextLine();
 
         new UserDAO().createUser(User.createUser(username, password, email));
-        System.out.println("User created.");
+        System.out.println("user.User created.");
     }
 
     private static void promptUserRead() {
@@ -56,7 +59,7 @@ public class Menu {
 
     private static int getInputForUserId(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter id of User:");
+        System.out.println("Enter id of user.User:");
         return scanner.nextInt();
     }
 
@@ -71,11 +74,11 @@ public class Menu {
         User userToUpdate = getInputForUpdatedUser();
 
         User resultUser = new UserDAO().updateUser(userToUpdate);
-        System.out.println("User changed to: \n"+resultUser);
+        System.out.println("user.User changed to: \n"+resultUser);
     }
     private static User getInputForUpdatedUser(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter id of User:");
+        System.out.println("Enter id of user.User:");
         int id = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter new username(no special symbols): ");
         String username = scanner.nextLine();
@@ -88,7 +91,7 @@ public class Menu {
     private static void promptUserDeletion() {
         int id = getInputForUserId();
         if(new UserDAO().deleteUser(id)){
-            System.out.println("User deleted successfully");
+            System.out.println("user.User deleted successfully");
         }
         else {
             System.out.println("No such user");

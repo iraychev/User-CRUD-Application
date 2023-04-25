@@ -1,3 +1,5 @@
+package user;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
@@ -10,7 +12,7 @@ public class UserDAO{
     private String DB_USERNAME;
     private String DB_PASSWORD;
 
-    UserDAO(){
+    public UserDAO(){
         try(FileInputStream fileInputStream = new FileInputStream("database_properties.properties")){
             Properties properties = new Properties();
             properties.load(fileInputStream);
@@ -93,7 +95,7 @@ public class UserDAO{
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new SQLException("User not found with id " + user.getId());
+                throw new SQLException("user.User not found with id " + user.getId());
             }
         }catch (SQLException e){
             e.printStackTrace();

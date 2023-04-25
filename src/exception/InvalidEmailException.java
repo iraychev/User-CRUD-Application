@@ -1,3 +1,5 @@
+package exception;
+
 public class InvalidEmailException extends RuntimeException{
 
     @Override

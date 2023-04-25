@@ -1,3 +1,10 @@
+package user;
+
+import exception.InvalidEmailException;
+import exception.InvalidPasswordException;
+import exception.InvalidUsernameException;
+import util.InputValidator;
+
 public class User {
     private final int id;
     private final String username;
@@ -50,7 +57,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "user.User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
