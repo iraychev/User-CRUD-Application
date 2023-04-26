@@ -18,26 +18,23 @@ public class User {
         this.email = email;
     }
 
-    public static User createUser(int id, String username, String password, String email) {
+    public static User createUser(int id, String username, String password, String email)
+            throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
         validateInput(username, password, email);
         return new User(id, username, password, email);
     }
 
-    public static User createUser(String username, String password, String email) {
-        validateInput(username, password, email);
-        return new User(0, username, password, email);
+    public static User createUser(String username, String password, String email)
+            throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
+        return createUser(0, username, password, email);
     }
 
-    private static void validateInput(String username, String password, String email) {
-        if (!InputValidator.validateUsername(username)) {
-            throw new InvalidUsernameException();
-        }
-        if (!InputValidator.validatePassword(password)) {
-            throw new InvalidPasswordException();
-        }
-        if (!InputValidator.validateEmail(email)) {
-            throw new InvalidEmailException();
-        }
+    private static void validateInput(String username, String password, String email)
+            throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
+        InputValidator.validateUsername(username);
+        InputValidator.validatePassword(password);
+        InputValidator.validateEmail(email);
+
     }
     public int getId() {
         return id;
@@ -57,11 +54,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "user.User{" +
+        return "| " +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+                " | username='" + username+
+                " | password='" + password+
+                " | email='" + email+
+                " |";
     }
 }

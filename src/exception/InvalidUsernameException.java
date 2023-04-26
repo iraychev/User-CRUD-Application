@@ -1,6 +1,6 @@
 package exception;
 
-public class InvalidUsernameException extends RuntimeException{
+public class InvalidUsernameException extends Exception{
 
     @Override
     public String getMessage() {

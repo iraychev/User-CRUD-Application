@@ -1,17 +1,23 @@
 package user;
 
+import exception.InvalidEmailException;
+import exception.InvalidPasswordException;
+import exception.InvalidUsernameException;
+import logging.MyLogger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class UserDAO{
-    private String DB_URL;
-    private String DB_USERNAME;
-    private String DB_PASSWORD;
-
+    private final String DB_URL;
+    private final String DB_USERNAME;
+    private final String DB_PASSWORD;
+    private final Logger LOGGER = MyLogger.getLogger();
     public UserDAO(){
         try(FileInputStream fileInputStream = new FileInputStream("database_properties.properties")){
             Properties properties = new Properties();
@@ -20,7 +26,8 @@ public class UserDAO{
             DB_USERNAME = properties.getProperty("DB_USERNAME");
             DB_PASSWORD = properties.getProperty("DB_PASSWORD");
         } catch (IOException e){
-            e.printStackTrace();
+            LOGGER.severe("Couldn't load database properties: "+ e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -38,7 +45,7 @@ public class UserDAO{
             statement.setString(3, user.getEmail());
             statement.executeUpdate();
         } catch(SQLException e){
-            e.printStackTrace();
+            LOGGER.severe("User creation failed: "+e.getMessage());
         }
     }
 
@@ -50,11 +57,14 @@ public class UserDAO{
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
-            if( resultSet.next()){
-                user = User.createUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("email"));
+            if(resultSet.next()){
+                user = User.createUser(resultSet.getInt("id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("email"));
             }
-        } catch(SQLException e){
-            e.printStackTrace();
+        } catch(SQLException | InvalidUsernameException | InvalidPasswordException | InvalidEmailException e){
+            LOGGER.severe("User read failed: "+e.getMessage());
         }
         return user;
     }
@@ -75,14 +85,14 @@ public class UserDAO{
                 User user = User.createUser(id, username, password, email);
                 users.add(user);
             }
-        } catch(SQLException e){
-            e.printStackTrace();
+        } catch(SQLException | InvalidUsernameException | InvalidPasswordException | InvalidEmailException e){
+            LOGGER.severe("All users read failed: "+e.getMessage());
         }
         return users;
     }
 
 
-    public User updateUser(User user) {
+    public void updateUser(User user) {
         String SqlQuery = "UPDATE user SET username = ?, password = ?, email = ? WHERE id = ?";
 
         try(Connection conn = getConnection()) {
@@ -98,9 +108,8 @@ public class UserDAO{
                 throw new SQLException("user.User not found with id " + user.getId());
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            LOGGER.severe("User update failed: "+e.getMessage());
         }
-        return user;
     }
 
 
@@ -113,7 +122,7 @@ public class UserDAO{
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         } catch (SQLException e){
-            e.printStackTrace();
+            LOGGER.severe("User deletion failed: "+e.getMessage());
         }
         return rowDeleted;
     }

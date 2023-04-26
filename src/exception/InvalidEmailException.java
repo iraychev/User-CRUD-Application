@@ -1,6 +1,6 @@
 package exception;
 
-public class InvalidEmailException extends RuntimeException{
+public class InvalidEmailException extends Exception{
 
     @Override
     public String getMessage() {

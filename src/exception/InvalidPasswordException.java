@@ -1,6 +1,6 @@
 package exception;
 
-public class InvalidPasswordException extends RuntimeException{
+public class InvalidPasswordException extends Exception{
 
     @Override
     public String getMessage() {
