@@ -8,3 +8,7 @@
 /dataSources.local.xml
 
 /database_properties.properties
+/.idea/
+/out/production/User CRUD/
+/User CRUD.iml
+/logs/errors.log
