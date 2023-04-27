@@ -58,7 +58,7 @@ public class UserDAO{
             ResultSet resultSet = statement.executeQuery();
 
             if(resultSet.next()){
-                user = User.createUser(resultSet.getInt("id"),
+                user = new User(resultSet.getInt("id"),
                         resultSet.getString("username"),
                         resultSet.getString("password"),
                         resultSet.getString("email"));
@@ -82,7 +82,7 @@ public class UserDAO{
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                User user = User.createUser(id, username, password, email);
+                User user = new User(id, username, password, email);
                 users.add(user);
             }
         } catch(SQLException | InvalidUsernameException | InvalidPasswordException | InvalidEmailException e){

@@ -5,11 +5,10 @@ import java.util.logging.*;
 
 public class MyLogger {
     private static final Logger logger = Logger.getLogger(MyLogger.class.getName());
-    private static final String LOG_FILE = "logs/errors.log";
 
     static{
         try{
-            FileHandler fileHandler = new FileHandler(LOG_FILE);
+            FileHandler fileHandler = new FileHandler("logs/errors.log");
             fileHandler.setFormatter(new SimpleFormatter());
             logger.addHandler(fileHandler);
         } catch (IOException e) {

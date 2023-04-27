@@ -11,29 +11,21 @@ public class User {
     private final String password;
     private final String email;
 
-    private User(int id, String username, String password, String email) {
+    public User(int id, String username, String password, String email)
+            throws InvalidPasswordException, InvalidUsernameException, InvalidEmailException {
+        validateInput(username, password, email);
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-    public static User createUser(int id, String username, String password, String email)
+    private void validateInput(String username, String password, String email)
             throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
-        validateInput(username, password, email);
-        return new User(id, username, password, email);
-    }
-
-    public static User createUser(String username, String password, String email)
-            throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
-        return createUser(0, username, password, email);
-    }
-
-    private static void validateInput(String username, String password, String email)
-            throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
-        InputValidator.validateUsername(username);
-        InputValidator.validatePassword(password);
-        InputValidator.validateEmail(email);
+        InputValidator inputValidator = new InputValidator();
+        inputValidator.validateUsername(username);
+        inputValidator.validatePassword(password);
+        inputValidator.validateEmail(email);
 
     }
     public int getId() {

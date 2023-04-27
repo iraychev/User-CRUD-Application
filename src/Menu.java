@@ -63,7 +63,7 @@ public class Menu {
         System.out.println("Enter new email:");
         String email = scanner.nextLine();
         try {
-            return User.createUser(id, username, password, email);
+            return new User(id, username, password, email);
         } catch (InvalidUsernameException | InvalidPasswordException | InvalidEmailException e) {
             LOGGER.severe("Create user failed: " + e.getMessage());
             return null;
