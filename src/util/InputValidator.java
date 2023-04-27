@@ -7,9 +7,9 @@ import exception.InvalidUsernameException;
 import java.util.regex.Pattern;
 
 public class InputValidator {
-    private final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$";
-    private final String EMAIL_PATTERN = "^[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+[a-zA-Z]+$";
-    private final String USERNAME_PATTERN = "^[a-zA-Z0-9_.]+$";
+    private final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,20}$";
+    private final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    private final String USERNAME_PATTERN = "^[a-zA-Z0-9._-]{3,20}$";
 
 
     public void validateUsername(String username) throws InvalidUsernameException {

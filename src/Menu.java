@@ -4,16 +4,19 @@ import exception.InvalidUsernameException;
 import logging.MyLogger;
 import user.User;
 import user.UserDAO;
+import util.InputValidator;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Menu {
     private final Logger LOGGER = MyLogger.getLogger();
-
+    private final InputValidator inputValidator = new InputValidator();
     public void startMenu() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            int choice;
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        try{
             do{
                 displayMenuOptions();
                 choice = Integer.parseInt(scanner.nextLine());
@@ -30,7 +33,8 @@ public class Menu {
             }
             while (true);
         } catch (NumberFormatException e) {
-            System.err.println("Invalid choice. Please enter a valid integer.");
+            System.err.println("Invalid choice. That is not a valid integer.");
+            startMenu();
         }
     }
 
@@ -48,24 +52,27 @@ public class Menu {
         User userToCreate = getInputForUser(0);
         if(userToCreate!=null){
             new UserDAO().createUser(userToCreate);
-            System.out.println("User created.");
         }
     }
 
     private User getInputForUser(int id) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter new username(no special symbols): ");
-        String username = scanner.nextLine();
-
-        System.out.println("Enter new password(At least one uppercase, one lowercase letter and a number): ");
-        String password = scanner.nextLine();
-
-        System.out.println("Enter new email:");
-        String email = scanner.nextLine();
         try {
+            System.out.println("Enter username(no special symbols): ");
+            String username = scanner.nextLine();
+            inputValidator.validateUsername(username);
+
+            System.out.println("Enter password(At least one uppercase, one lowercase letter and a number): ");
+            String password = scanner.nextLine();
+            inputValidator.validatePassword(password);
+
+            System.out.println("Enter email:");
+            String email = scanner.nextLine();
+            inputValidator.validateEmail(email);
+
             return new User(id, username, password, email);
         } catch (InvalidUsernameException | InvalidPasswordException | InvalidEmailException e) {
-            LOGGER.severe("Create user failed: " + e.getMessage());
+            LOGGER.severe("User creation failed: " + e.getMessage());
             return null;
         }
     }
@@ -73,7 +80,11 @@ public class Menu {
     private void promptUserRead() {
         int id = getInputForUserId();
         User user = new UserDAO().readUser(id);
-        System.out.println(user.toString());
+        if(user != null) {
+            System.out.println(user);
+        } else {
+            System.err.println("No user with id " + id);
+        }
     }
 
     private int getInputForUserId(){
@@ -103,7 +114,7 @@ public class Menu {
             System.out.println("User deleted successfully");
         }
         else {
-            System.out.println("No such user");
+            System.err.println("No such user");
         }
     }
 }

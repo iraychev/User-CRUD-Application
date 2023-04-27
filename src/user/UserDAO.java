@@ -1,10 +1,6 @@
 package user;
 
-import exception.InvalidEmailException;
-import exception.InvalidPasswordException;
-import exception.InvalidUsernameException;
 import logging.MyLogger;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
@@ -63,7 +59,7 @@ public class UserDAO{
                         resultSet.getString("password"),
                         resultSet.getString("email"));
             }
-        } catch(SQLException | InvalidUsernameException | InvalidPasswordException | InvalidEmailException e){
+        } catch(SQLException e){
             LOGGER.severe("User read failed: "+e.getMessage());
         }
         return user;
@@ -85,7 +81,7 @@ public class UserDAO{
                 User user = new User(id, username, password, email);
                 users.add(user);
             }
-        } catch(SQLException | InvalidUsernameException | InvalidPasswordException | InvalidEmailException e){
+        } catch(SQLException e){
             LOGGER.severe("All users read failed: "+e.getMessage());
         }
         return users;
@@ -105,7 +101,7 @@ public class UserDAO{
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new SQLException("user.User not found with id " + user.getId());
+                throw new SQLException("User with id " + user.getId() + "not found" );
             }
         }catch (SQLException e){
             LOGGER.severe("User update failed: "+e.getMessage());
