@@ -1,6 +1,7 @@
-package user;
+package DAO;
 
 import logging.MyLogger;
+import user.User;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class UserDAO{
+public class UserDAO implements DAO<User> {
     private final String DB_URL;
     private final String DB_USERNAME;
     private final String DB_PASSWORD;
@@ -31,7 +32,7 @@ public class UserDAO{
         return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
     }
 
-    public void createUser(User user) {
+    public void create(User user) {
         String SqlQuery = "INSERT INTO user (username, password,email) VALUES(?, ?, ?)";
 
         try(Connection conn = getConnection()){
@@ -45,7 +46,7 @@ public class UserDAO{
         }
     }
 
-    public User readUser(int id) {
+    public User read(int id) {
         String SqlQuery = "SELECT * from user WHERE id = ?";
         User user = null;
         try(Connection conn = getConnection()){
@@ -65,7 +66,7 @@ public class UserDAO{
         return user;
     }
 
-    public List<User> readAllUsers() {
+    public List<User> readAll() {
         String SqlQuery = "SELECT * from user";
         List<User> users = new ArrayList<>();
 
@@ -88,7 +89,7 @@ public class UserDAO{
     }
 
 
-    public void updateUser(User user) {
+    public void update(User user) {
         String SqlQuery = "UPDATE user SET username = ?, password = ?, email = ? WHERE id = ?";
 
         try(Connection conn = getConnection()) {
@@ -109,7 +110,7 @@ public class UserDAO{
     }
 
 
-    public boolean deleteUser(int id) {
+    public boolean delete(int id) {
         String SQLQuery = "DELETE FROM user WHERE user.id = ?";
         boolean rowDeleted = false;
 

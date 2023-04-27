@@ -2,17 +2,22 @@ import exception.InvalidEmailException;
 import exception.InvalidPasswordException;
 import exception.InvalidUsernameException;
 import logging.MyLogger;
+import DAO.DAO;
 import user.User;
-import user.UserDAO;
 import util.InputValidator;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class Menu {
+public class UserMenu {
     private final Logger LOGGER = MyLogger.getLogger();
     private final InputValidator inputValidator = new InputValidator();
+    private final DAO<User> userDao;
+
+    public UserMenu(DAO<User> userDao){
+        this.userDao = userDao;
+    }
     public void startMenu() {
         Scanner scanner = new Scanner(System.in);
         int choice;
@@ -51,7 +56,7 @@ public class Menu {
     private void promptUserCreation() {
         User userToCreate = getInputForUser(0);
         if(userToCreate!=null){
-            new UserDAO().createUser(userToCreate);
+            userDao.create(userToCreate);
         }
     }
 
@@ -79,7 +84,7 @@ public class Menu {
 
     private void promptUserRead() {
         int id = getInputForUserId();
-        User user = new UserDAO().readUser(id);
+        User user = userDao.read(id);
         if(user != null) {
             System.out.println(user);
         } else {
@@ -94,7 +99,7 @@ public class Menu {
     }
 
     private void promptAllUsersRead() {
-        List<User> allUsers = new UserDAO().readAllUsers();
+        List<User> allUsers = userDao.readAll();
         for (User i : allUsers){
             System.out.println(i);
         }
@@ -104,13 +109,13 @@ public class Menu {
         int id = getInputForUserId();
         User userToUpdate = getInputForUser(id);
         if(userToUpdate!=null){
-            new UserDAO().updateUser(userToUpdate);
+            userDao.update(userToUpdate);
         }
     }
 
     private void promptUserDeletion() {
         int id = getInputForUserId();
-        if(new UserDAO().deleteUser(id)){
+        if(userDao.delete(id)){
             System.out.println("User deleted successfully");
         }
         else {
