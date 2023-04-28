@@ -1,10 +1,11 @@
+
+import DAO.DAO;
 import exception.InvalidEmailException;
 import exception.InvalidPasswordException;
 import exception.InvalidUsernameException;
 import logging.MyLogger;
-import DAO.DAO;
-import user.User;
 import util.InputValidator;
+import user.User;
 
 import java.util.List;
 import java.util.Scanner;
